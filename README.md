@@ -3,7 +3,23 @@ simple text editor because why not
 
 (FOR NOW IT's A SLOPPED STUB)
 
-things i want to implement:
+## things that could be optimized :
+
+ - Implement Slice View and better string
+
+ - File IO
+ - make a better memmove
+ - have 
+ - use a Gap Buffer per line instead of memmove
+ - first chan Implement a Piece Table or a Rope Data Structure (original file read-only + append-only add buffer)
+
+ - Implement Viewport Culling & Dirty Flags for Rendering
+
+ - Glyph Caching and Batching Text Draws
+
+ - file caching, and map line pointer
+
+## things i want to implement:
 
  - Color Scheme
  - LF -> CRLF | CRLF -> LF conversion
@@ -14,3 +30,5 @@ things i want to implement:
  - File Explorer
  - Motion
  - Doc / Ref finder
+
+ - History
