@@ -286,5 +286,6 @@ int	main(void) {
         EndDrawing();
     }
     CloseWindow();
+	free(lines);
     return 0;
 }
