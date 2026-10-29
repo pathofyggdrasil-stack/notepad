@@ -60,6 +60,7 @@ int main(void) {
             }
             blinkTimer = 0.0f;
         }
+		// || IsKeyDown(KEY_BACKSPACE) may add this with a timer to not delete a line by mistake
         if (IsKeyPressed(KEY_BACKSPACE)) { TB_RemoveChar(active); blinkTimer = 0.0f; }
         if (IsKeyPressed(KEY_LEFT))      { TB_MoveCursorLeft(active); blinkTimer = 0.0f; }
         if (IsKeyPressed(KEY_RIGHT))     { TB_MoveCursorRight(active); blinkTimer = 0.0f; }

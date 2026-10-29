@@ -24,6 +24,7 @@ simple text editor because why not
 
 ## things i want to implement:
 
+ - Visual Mode like vim
  - Color Scheme
  - LF -> CRLF | CRLF -> LF conversion
  - UTF8 | ASCII | UNICODE | BINARY
