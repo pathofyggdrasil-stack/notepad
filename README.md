@@ -3,6 +3,9 @@ simple text editor because why not
 
 (FOR NOW IT's A SLOPPED STUB)
 
+## BUG :
+
+
 ## things that could be optimized :
 
  - Implement Slice View and better string

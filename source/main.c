@@ -68,18 +68,29 @@ int main(void) {
 
         // --- Render ---
         BeginDrawing();
-        ClearBackground((Color){24, 24, 24, 255});
+        ClearBackground(colorSchemes[activeScheme].background);
 
-        // 1. Render Notepad Workspace (Top Section)
+		// 1. Render Notepad Workspace (Top Section)
         DrawRectangle(0, 0, screenWidth, screenHeight - 50, (Color){30, 30, 30, 255});
         for (int i = 0; i < notepadBuffer->lineCount; i++) {
             float y = 20.0f + (i * 24.0f);
             DrawText(notepadBuffer->lines[i].chars, 20, (int)y, 20, (Color){220, 220, 220, 255});
         }
-        // Notepad Cursor
+        
+        // Notepad Cursor (Precise Pixel Measurement)
         if (activeBuffer == 0 && (int)(blinkTimer * 2.0f) % 2 == 0) {
-            float cx = 20.0f + notepadBuffer->cursorCol * 12.0f;
-            float cy = 20.0f + notepadBuffer->cursorLine * 24.0f;
+            // Extract the exact substring from the current line up to the cursor column
+            char sub[TB_MAX_LINE_LENGTH];
+            int col = notepadBuffer->cursorCol;
+            int lineIdx = notepadBuffer->cursorLine;
+            
+            memcpy(sub, notepadBuffer->lines[lineIdx].chars, col);
+            sub[col] = '\0'; // Null-terminate the slice
+            
+            float textWidth = (float)MeasureText(sub, 20); // 20 is our font size
+            float cx = 20.0f + textWidth;
+            float cy = 20.0f + lineIdx * 24.0f;
+            
             DrawRectangle((int)cx, (int)cy, 2, 22, WHITE);
         }
 
@@ -88,13 +99,20 @@ int main(void) {
         DrawRectangleLines(0, screenHeight - 45, screenWidth, 45, activeBuffer == 1 ? GREEN : DARKGRAY);
         DrawText(">", 10, screenHeight - 35, 20, GREEN);
         DrawText(consoleBuffer->lines[0].chars, 30, screenHeight - 35, 20, GREEN);
-        
-        // Console Cursor
+
+		// Console Cursor (Precise Pixel Measurement)
         if (activeBuffer == 1 && (int)(blinkTimer * 2.0f) % 2 == 0) {
-            float ccx = 30.0f + consoleBuffer->cursorCol * 12.0f;
+            char sub[TB_MAX_LINE_LENGTH];
+            int col = consoleBuffer->cursorCol;
+            
+            memcpy(sub, consoleBuffer->lines[0].chars, col);
+            sub[col] = '\0';
+            
+            float textWidth = (float)MeasureText(sub, 20);
+            float ccx = 30.0f + textWidth;
+            
             DrawRectangle((int)ccx, screenHeight - 37, 2, 20, GREEN);
         }
-
         // Status bar info
         DrawText("[TAB] Switch Focus (Notepad / Console)", 10, screenHeight - 70, 14, GRAY);
 
