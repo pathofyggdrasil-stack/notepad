@@ -10,7 +10,7 @@
 #include "text_buffer.h"
 #include "color_scheme.h"
 
-int activeScheme = 0;
+ColorScheme *activeScheme = 0;
 int totalSchemes = sizeof(colorSchemes) / sizeof(ColorScheme);
 
 int main(void) {
@@ -24,6 +24,7 @@ int main(void) {
     TextBuffer *notepadBuffer = TB_Create(5000); // Multi-line workspace
     TextBuffer *consoleBuffer = TB_Create(1);    // Single-line command console
 
+	activeScheme = &colorSchemes[0];
     int activeBuffer = 0; // 0 = Notepad, 1 = Console
     float blinkTimer = 0.0f;
 
@@ -69,13 +70,13 @@ int main(void) {
 
         // --- Render ---
         BeginDrawing();
-        ClearBackground(colorSchemes[activeScheme].background);
+        ClearBackground(activeScheme->background);
 
 		// 1. Render Notepad Workspace (Top Section)
-        DrawRectangle(0, 0, screenWidth, screenHeight - 50, (Color){30, 30, 30, 255});
+        DrawRectangle(0, 0, screenWidth, screenHeight - 50, activeScheme->lineNumbersBg);
         for (int i = 0; i < notepadBuffer->lineCount; i++) {
             float y = 20.0f + (i * 24.0f);
-            DrawText(notepadBuffer->lines[i].chars, 20, (int)y, 20, (Color){220, 220, 220, 255});
+            DrawText(notepadBuffer->lines[i].chars, 20, (int)y, 20, activeScheme->text);
         }
         
         // Notepad Cursor (Precise Pixel Measurement)
@@ -92,11 +93,11 @@ int main(void) {
             float cx = 20.0f + textWidth;
             float cy = 20.0f + lineIdx * 24.0f;
             
-            DrawRectangle((int)cx, (int)cy, 2, 22, WHITE);
+            DrawRectangle((int)cx, (int)cy, 2, 22, activeScheme->cursor);
         }
 
         // 2. Render Command Line Console (Bottom Section)
-        DrawRectangle(0, screenHeight - 45, screenWidth, 45, (Color){15, 15, 15, 255});
+        DrawRectangle(0, screenHeight - 45, screenWidth, 45, activeScheme->background);
         DrawRectangleLines(0, screenHeight - 45, screenWidth, 45, activeBuffer == 1 ? GREEN : DARKGRAY);
         DrawText(">", 10, screenHeight - 35, 20, GREEN);
         DrawText(consoleBuffer->lines[0].chars, 30, screenHeight - 35, 20, GREEN);
@@ -115,7 +116,7 @@ int main(void) {
             DrawRectangle((int)ccx, screenHeight - 37, 2, 20, GREEN);
         }
         // Status bar info
-        DrawText("[TAB] Switch Focus (Notepad / Console)", 10, screenHeight - 70, 14, GRAY);
+        DrawText("[TAB] Switch Focus (Notepad / Console)", 10, screenHeight - 70, 14, activeScheme->lineNumbersText);
 
         EndDrawing();
     }

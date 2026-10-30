@@ -12,6 +12,11 @@ typedef struct {
     Color lineNumbersBg;
     Color lineNumbersText;
     Color currentLineHighlight;
+	Color secondaryText;
+	Color secondaryBackground;
+	Color highlight;
+	Color visual;
+	Color dime;
 } ColorScheme;
 
 // Available Color Schemes
